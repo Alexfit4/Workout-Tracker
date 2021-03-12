@@ -19,6 +19,7 @@ app.use(express.static("public"));
 app.use(express.static("seeders"));
 
 require("./routes/html-routes")(app);
+require("./routes/workout-routes")(app);
 
 
 
