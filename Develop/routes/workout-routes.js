@@ -1,75 +1,57 @@
-const Workout = require("../models/workoutModel");
-const { ObjectId } = require('bson');
+const Workout = require("../models/Workout");
+// const Exercise = require("../models/Exercise");
+const { ObjectId } = require("bson");
 
 // Routes
 module.exports = (app) => {
 	// * GET route for getting all of the projects
 	//!  Read
-	app.get("/api/workouts", async (req, res) => {
-		try {
-			const workouts = await Workout.find({});
+	app.get("/api/workouts", (req, res) => {
+		Workout.find({}, (error, data) => {
+		  if (error) {
+			res.send(error);
+		  } else {
+			res.json(data);
+		  }
+		});
+	  });
 
-			return res.json(workouts);
-		} catch (err) {
-			console.log(err, "Something went wrong");
 
-			return res.json(err);
-		}
-	});
 
-	app.post("/api/workouts", async (req, res) => {
-		const { type, name, duration, weight, reps, sets } = req.body;
-
-		try {
-			const workouts = await Workout.create({
-				type,
-				name,
-				duration,
-				weight,
-				reps,
-				sets,
+	app.post("/api/workouts/", (req, res) => {
+		console.log("createWorkout", req.body);
+		Workout.create({
+			exercises: [req.body],
+		})
+			.then((dbWorkout) => {
+				res.json(dbWorkout);
+				console.log(5, dbWorkout);
+			})
+			.catch((err) => {
+				res.json(err);
+				// console.log(6);
 			});
-            console.log(workouts);
-			return res.json(workouts);
-            
-		} catch (err) {
-			console.log(err, "Something went wrong");
+	});
 
-			return res.json(err);
-		}
+	app.put("/api/workouts/:id", (req, res) => {
+		console.log(req.params.id);
+		console.log(req.body);
+
+		Workout.findOneAndUpdate(
+			{ _id: req.params.id },
+			{ $push: { exercises: req.body } },
+			{ new: true }
+		)
+			// .populate("Workouts")
+			.then((dbWorkout) => {
+				res.json(dbWorkout);
+				console.log(7);
+			})
+			.catch((err) => {
+				res.json(err);
+				// console.log(8);
+			});
 	});
 
 
-    app.put('/api/workouts/:id', async (req, res) => {
-        const id = req.params.id
-    
-        try {
-            const workouts = await Workout.findOneAndUpdate(
-                {_id: ObjectId(id)},
-                {
-                    $set: {
-                        type: req.body.type,
-                        name: req.body.name,
-                        duration: req.body.duration,
-                        weight: req.body.weight,
-                        reps: req.body.reps,
-                        sets: req.body.sets
-                    }
-                },
-                {
-                    upsert: true
-                }
-    
-                )
-    
-    
-    
-            return  res.json(workouts);
-            
-        } catch (err) {
-            console.log(err, "Something went wrong");
-    
-            return  res.json(err);
-        }
-    });
 };

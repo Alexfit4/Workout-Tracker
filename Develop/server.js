@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const API = require('./public/api')
-const Workout = require('./models/workoutModel');
+
 
 let mongoose = require("mongoose");
 
