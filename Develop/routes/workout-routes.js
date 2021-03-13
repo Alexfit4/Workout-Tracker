@@ -7,20 +7,22 @@ module.exports = (app) => {
 	// * GET route for getting all of the projects
 	//!  Read
 	app.get("/api/workouts", (req, res) => {
-		Workout.find({}, (error, data) => {
-		  if (error) {
-			res.send(error);
-		  } else {
-			res.json(data);
-		  }
-		});
-	  });
-
-
+		console.log("get method");
+		Workout.find({})
+			.then((dbWorkout) => {
+				res.json(dbWorkout);
+				console.log(dbWorkout);
+			})
+			.catch((err) => {
+				console.log("here", err);
+				res.json(err);
+			});
+	});
 
 	app.post("/api/workouts", (req, res) => {
+		console.log("post method");
 		console.log(req.body);
-		
+
 		Workout.create({
 			exercises: [req.body],
 		})
@@ -30,13 +32,13 @@ module.exports = (app) => {
 			})
 			.catch((err) => {
 				res.json(err);
-				
 			});
 	});
 
 	app.put("/api/workouts/:id", (req, res) => {
 		console.log(req.params.id);
 		console.log(req.body);
+		console.log("put method");
 
 		Workout.findOneAndUpdate(
 			{ _id: req.params.id },
@@ -56,12 +58,11 @@ module.exports = (app) => {
 
 	app.get("/api/workouts/range", (req, res) => {
 		Workout.find({}, (error, data) => {
-		  if (error) {
-			res.send(error);
-		  } else {
-			res.json(data);
-		  }
+			if (error) {
+				res.send(error);
+			} else {
+				res.json(data);
+			}
 		});
-	  });
-
+	});
 };
