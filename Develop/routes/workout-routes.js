@@ -18,18 +18,19 @@ module.exports = (app) => {
 
 
 
-	app.post("/api/workouts/", (req, res) => {
-		console.log("createWorkout", req.body);
+	app.post("/api/workouts", (req, res) => {
+		console.log(req.body);
+		
 		Workout.create({
 			exercises: [req.body],
 		})
 			.then((dbWorkout) => {
 				res.json(dbWorkout);
-				console.log(5, dbWorkout);
+				console.log(dbWorkout);
 			})
 			.catch((err) => {
 				res.json(err);
-				// console.log(6);
+				
 			});
 	});
 
@@ -45,7 +46,7 @@ module.exports = (app) => {
 			// .populate("Workouts")
 			.then((dbWorkout) => {
 				res.json(dbWorkout);
-				console.log(7);
+				console.log(dbWorkout);
 			})
 			.catch((err) => {
 				res.json(err);
@@ -53,5 +54,14 @@ module.exports = (app) => {
 			});
 	});
 
+	app.get("/api/workouts/range", (req, res) => {
+		Workout.find({}, (error, data) => {
+		  if (error) {
+			res.send(error);
+		  } else {
+			res.json(data);
+		  }
+		});
+	  });
 
 };
