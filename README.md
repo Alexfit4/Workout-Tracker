@@ -48,8 +48,6 @@ Thank you John Herman (my tutor) for helping me with the front end.
   - CSS
 
   ## Questions
-
-  Developer Github profiles:
   
   Amir Ashtiany: https://github.com/Alexfit4 
 
