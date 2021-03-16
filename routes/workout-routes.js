@@ -23,9 +23,7 @@ module.exports = (app) => {
 		console.log("post method");
 		console.log(req.body);
 
-		Workout.create({
-			exercises: [req.body],
-		})
+		Workout.create(req.body)
 			.then((dbWorkout) => {
 				res.json(dbWorkout);
 				console.log(dbWorkout);
